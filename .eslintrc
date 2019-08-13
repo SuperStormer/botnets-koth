@@ -1,0 +1,42 @@
+{
+	"extends":[
+		"eslint:recommended",
+		"plugin:react/recommended",
+		"plugin:jsx-a11y/recommended"
+	],
+	"env":{
+		"es6":"true",
+		"browser":"true"
+	},
+	"parserOptions": {
+		"ecmaVersion":8,
+		"sourceType":"module",
+		"ecmaFeatures": {
+			"jsx": true
+		}
+	},
+	"plugins": [
+		"react",
+		"jsx-a11y"
+	],
+	"rules":{
+		"no-console":"off",
+		"no-duplicate-case":"warn",
+		"no-lonely-if":"warn",
+		"react/prop-types":"off",
+		"react/jsx-no-undef": ["error", { "allowGlobals": true }],
+		"jsx-a11y/no-noninteractive-element-interactions":"off",
+		"jsx-a11y/label-has-for":["error",{
+			"required":"id"
+		}],
+		"jsx-a11y/no-onchange":"off"
+	},
+	"globals": {
+        "React": true,
+		"ReactDOM": false,
+		"moment":true,
+		"swal":true,
+		"SearchBar":true,
+		"TimePicker":true
+    }
+}
