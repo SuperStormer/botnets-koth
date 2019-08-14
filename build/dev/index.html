@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Chore Manager</title>
+	<title>Botnets KotH</title>
 	<meta name="theme-color" content="#38c2f0">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="A web app that manages your chores">
@@ -17,7 +17,6 @@
 	<meta name="theme-color" content="#ffffff">
 </head>
 <body>
-	<main id="app" data-reactroot=""><div id="chore-list-frame"><form class="search-bar" id="search-bar"><input value="" placeholder="Search by person"/><button type="submit">Search</button><button>Clear</button></form><button id="add-chore-button">Add Chore</button><p class="loading">Loading...</p></div><div id="chore-details-frame"><p id="no-chore-selected">No Chore has been selected</p></div></main>
 	<noscript>
 		Javascript is not supported by your browser or disabled. Please turn on Javascript or switch browsers
 		<style>
@@ -26,8 +25,7 @@
 			}
 		</style>
 	</noscript>
-	<footer>ⒸLarry 2017</footer>
-
+	<canvas id="grid" width=700 height=700>Your browser does not support the Canvas API. Please switch browsers</canvas>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/react/16.3.2/umd/react.production.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.3.2/umd/react-dom.production.min.js"></script>
 	<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/react/16.0.0/umd/react.development.js"></script>

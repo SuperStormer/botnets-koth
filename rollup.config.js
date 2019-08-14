@@ -1,39 +1,38 @@
 let path = require("path");
 let BabelPlugin = require("rollup-plugin-babel");
-let TerserPlugin = require("rollup-plugin-terser");
+let TerserPlugin = require("rollup-plugin-terser").terser;
 let EslintPlugin = require("rollup-plugin-eslint").eslint;
 //let GzipPlugin = require("rollup-plugin-gzip");
 //let UglifyES = require("uglify-es");
 let production = process.env.NODE_ENV === 'production';
-let plugins =[
+let plugins = [
 	EslintPlugin(),
 	BabelPlugin(),
 ];
 let pathName = "";
-if(production){
+if (production) {
 	plugins.push(
 		TerserPlugin({
-			sourceMap:true,
-			ecma:8,
+			ecma: 8,
 			compress: {
-				ecma:8,
-				passes:2,
+				ecma: 8,
+				passes: 2,
 			},
-			output:{
-				ecma:8
+			output: {
+				ecma: 8
 			}
 		})
 	);
-	pathName="build/prod/scripts";
-}else{
-	pathName="build/dev/scripts";
+	pathName = "build/prod/scripts";
+} else {
+	pathName = "build/dev/scripts";
 }
-module.exports =  {
+module.exports = {
 	input: "./src/scripts/index.js",
 	output: {
-		file: path.resolve(__dirname,pathName,"bundle.js"),
-		format:"es",
-		sourcemap:true
+		file: path.resolve(__dirname, pathName, "bundle.js"),
+		format: "es",
+		sourcemap: true
 	},
 	plugins
 };

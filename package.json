@@ -1,5 +1,5 @@
 {
-	"name": "choremanager",
+	"name": "botnets-koth",
 	"version": "1.0.0",
 	"scripts": {
 		"start": "npm-run-all --parallel watch:* start:browsersync",
@@ -16,9 +16,8 @@
 		"build:sass": "node-sass src/styles",
 		"build:icons": "real-favicon generate favicon-description.json favicon-data.json",
 		"build:icons:all": "npm-run-all --parallel \"build:icons -- \\\"build\\dev\\\"\" \"build:icons -- \\\"build\\prod\\\"\" --serial \"copy:manifest -- \\\"build\\dev\\\"\" \"copy:manifest -- \\\"build\\prod\\\"\"",
-		"build:service-worker": "node build-service-worker.js",
-		"build:dev": "npm-run-all --parallel build:js stylelint \"build:sass -- --output build/dev/styles\" copy:html \"copy:manifest -- \\\"build\\dev\\manifest.json\\\"\" build:service-worker",
-		"build:prod": "npm-run-all --parallel \"build:js -- --environment NODE_ENV:production\" stylelint \"build:sass  -- --output build/prod/styles --output-style compressed\" build:html \"copy:manifest -- \\\"build\\prod\\manifest.json\\\"\" \"build:service-worker -- true\"",
+		"build:dev": "npm-run-all --parallel build:js stylelint \"build:sass -- --output build/dev/styles\" copy:html \"copy:manifest -- \\\"build\\dev\\manifest.json\\\"\"",
+		"build:prod": "npm-run-all --parallel \"build:js -- --environment NODE_ENV:production\" stylelint \"build:sass  -- --output build/prod/styles --output-style compressed\" build:html \"copy:manifest -- \\\"build\\prod\\manifest.json\\\"\" ",
 		"watch:js": "npm run chokidar \"src/scripts/**/*.js\" \"npm run build:js\"",
 		"watch:sass": "npm run chokidar \"src/styles/*.scss\" \"npm run build:sass\"",
 		"watch:service-worker": "npm run chokidar \"src/service_worker.js\" \"npm run build:service-worker\"",

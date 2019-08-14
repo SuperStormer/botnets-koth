@@ -1,0 +1,11 @@
+#grid {
+  display: inline-block; }
+
+#grid {
+  text-align: center;
+  vertical-align: middle; }
+
+#grid {
+  border-style: black;
+  border-width: 3px;
+  border-color: black; }
