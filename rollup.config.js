@@ -1,10 +1,9 @@
 let path = require("path");
 let BabelPlugin = require("rollup-plugin-babel");
 let TerserPlugin = require("rollup-plugin-terser");
-let EslintPlugin = require("rollup-plugin-eslint");
+let EslintPlugin = require("rollup-plugin-eslint").eslint;
 //let GzipPlugin = require("rollup-plugin-gzip");
 //let UglifyES = require("uglify-es");
-console.log(process.env.NODE_ENV)
 let production = process.env.NODE_ENV === 'production';
 let plugins =[
 	EslintPlugin(),

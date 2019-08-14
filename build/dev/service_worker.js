@@ -1,4 +1,4 @@
-self.addEventListener("install",(event)=>{
+const CACHE_NAME="choremanager68f3878f100701e3d6fc5c05e3b146fe";self.addEventListener("install",(event)=>{
 	self.skipWaiting();
 	event.waitUntil(
 		caches.open(CACHE_NAME).then((cache)=>{

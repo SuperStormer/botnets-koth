@@ -2,7 +2,8 @@
 	"extends":[
 		"eslint:recommended",
 		"plugin:react/recommended",
-		"plugin:jsx-a11y/recommended"
+		"plugin:jsx-a11y/recommended",
+		"plugin:compat/recommended"
 	],
 	"env":{
 		"es6":"true",
@@ -33,10 +34,6 @@
 	},
 	"globals": {
         "React": true,
-		"ReactDOM": false,
-		"moment":true,
-		"swal":true,
-		"SearchBar":true,
-		"TimePicker":true
+		"ReactDOM": false
     }
 }

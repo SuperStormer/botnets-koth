@@ -6,13 +6,13 @@ const app = express();
 const port = 8;
 const production = process.argv[2]==="production";
 const pathName = production?"build/prod":"build/dev";
-const options = production?{
+const options = /*production?{
 	setHeaders(response,path){
 		if(path.endsWith("html")||path.endsWith("js")||path.endsWith("css")){
 			response.set("Content-Encoding","gzip");
 		}
 	}
-}:{};
+}:*/{};
 app.use(express.static(path.join(__dirname,pathName),options));
 app.get('/', (request, response) => {
 	response.render("index.html")
