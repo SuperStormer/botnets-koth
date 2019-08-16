@@ -1,27 +1,34 @@
 {
-	"extends":[
-		"eslint:recommended"
+	"extends": [
+		"eslint:recommended",
+		"plugin:unicorn/recommended",
+		"prettier",
+		"prettier/unicorn"
 	],
-	"env":{
-		"es6":true,
-		"browser":true,
-		"node":true
+	"env": {
+		"es6": true,
+		"browser": true,
+		"node": true
 	},
 	"parserOptions": {
-		"ecmaVersion":8,
-		"sourceType":"module",
+		"ecmaVersion": 8,
+		"sourceType": "module",
 		"ecmaFeatures": {
 			"jsx": true
 		}
 	},
-	"plugins": [],
-	"rules":{
-		"no-console":"off",
-		"no-duplicate-case":"warn",
-		"no-lonely-if":"warn"
+	"plugins": ["unicorn"],
+	"rules": {
+		"no-console": "off",
+		"no-duplicate-case": "warn",
+		"no-lonely-if": "warn",
+		"unicorn/filename-case": "off",
+		"unicorn/prevent-abbreviations": "off",
+		"unicorn/prefer-query-selector": "off",
+		"unicorn/prefer-add-event-listener": "off"
 	},
 	"globals": {
-        "React": true,
+		"React": true,
 		"ReactDOM": false
-    }
+	}
 }
