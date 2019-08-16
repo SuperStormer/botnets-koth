@@ -1,8 +1,10 @@
-export class WorkerBot{
-    constructor(){
-        this.storageSize=0
-        this.storage=""
-    }
-    performAction(surrondings,message){}
-    sendMessage(surrondings){}
+/*eslint no-unused-vars:0*/
+export default class WorkerBot {
+	constructor(x, y) {
+		this.storageSize = 0;
+		this.storage = "";
+		this.color = "";
+	}
+	performAction(surrondings, message) {}
+	sendMessage(surrondings) {}
 }

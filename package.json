@@ -1,6 +1,12 @@
 {
 	"name": "botnets-koth",
 	"version": "1.0.0",
+	"homepage": "https://github.com/SuperStormer/botnets-koth",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/SuperStormer/botnets-koth.git"
+	},
 	"scripts": {
 		"start": "npm-run-all --parallel watch:* start:browsersync",
 		"start:server": "node server.js",
@@ -28,20 +34,20 @@
 	},
 	"devDependencies": {
 		"@babel/core": "^7.5.5",
-		"@babel/preset-react": "^7.0.0",
+		"@babel/preset-env": "^7.5.5",
 		"browser-sync": "^2.26.7",
 		"chokidar": "^3.0.2",
 		"cli-real-favicon": "0.0.8",
 		"eslint": "^6.1.0",
+		"eslint-config-prettier": "^6.0.0",
 		"eslint-plugin-compat": "^3.3.0",
-		"eslint-plugin-jsx-a11y": "^6.2.3",
-		"eslint-plugin-react": "^7.14.3",
 		"express": "^4.17.1",
 		"html-minifier": "^4.0.0",
 		"lodash": "^4.17.15",
 		"node-sass": "^4.12.0",
 		"npm-run-all": "^4.1.5",
-		"rimraf": "^2.7.0",
+		"prettier": "^1.18.2",
+		"rimraf": "^3.0.0",
 		"rollup": "^1.19.4",
 		"rollup-plugin-babel": "^4.3.3",
 		"rollup-plugin-eslint": "^7.0.0",

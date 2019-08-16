@@ -1,5 +1,4 @@
 /* use this for perf tests on dev builds to bypass browser-sync or testing prod builds */
-const fs = require("fs");
 const express = require("express");
 const path = require("path");
 const app = express();

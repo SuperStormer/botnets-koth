@@ -1,13 +1,11 @@
 {
 	"extends":[
-		"eslint:recommended",
-		"plugin:react/recommended",
-		"plugin:jsx-a11y/recommended",
-		"plugin:compat/recommended"
+		"eslint:recommended"
 	],
 	"env":{
-		"es6":"true",
-		"browser":"true"
+		"es6":true,
+		"browser":true,
+		"node":true
 	},
 	"parserOptions": {
 		"ecmaVersion":8,
@@ -16,21 +14,11 @@
 			"jsx": true
 		}
 	},
-	"plugins": [
-		"react",
-		"jsx-a11y"
-	],
+	"plugins": [],
 	"rules":{
 		"no-console":"off",
 		"no-duplicate-case":"warn",
-		"no-lonely-if":"warn",
-		"react/prop-types":"off",
-		"react/jsx-no-undef": ["error", { "allowGlobals": true }],
-		"jsx-a11y/no-noninteractive-element-interactions":"off",
-		"jsx-a11y/label-has-for":["error",{
-			"required":"id"
-		}],
-		"jsx-a11y/no-onchange":"off"
+		"no-lonely-if":"warn"
 	},
 	"globals": {
         "React": true,

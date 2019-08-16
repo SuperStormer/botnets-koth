@@ -18,6 +18,10 @@ if (production) {
 				ecma: 8,
 				passes: 2,
 			},
+			mangle:{
+				keep_classnames:true,
+				//keep_fnames:true
+			},
 			output: {
 				ecma: 8
 			}
