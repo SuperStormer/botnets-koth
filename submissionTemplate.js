@@ -1,6 +1,6 @@
 /* eslint constructor-super:0,no-this-before-super:0,no-unused-vars:0*/
-import ControllerBot from "./ControllerBot.js";
-import WorkerBot from "./WorkerBot.js";
+import ControllerBot from "./src/scripts/ControllerBot.js";
+import WorkerBot from "./src/scripts/WorkerBot.js";
 
 //copy the part below
 function yourBotnet() {

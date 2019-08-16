@@ -1,7 +1,12 @@
 {
 	"extends": [
 		"eslint:recommended",
+		"plugin:compat/recommended",
 		"plugin:unicorn/recommended",
+		"plugin:promise/recommended",
+		"plugin:sonarjs/recommended",
+		"plugin:array-func/recommended",
+		"plugin:import/errors",
 		"prettier",
 		"prettier/unicorn"
 	],
@@ -17,7 +22,14 @@
 			"jsx": true
 		}
 	},
-	"plugins": ["unicorn"],
+	"plugins": [
+		"unicorn",
+		"promise",
+		"sonarjs",
+		"optimize-regex",
+		"array-func",
+		"import"
+	],
 	"rules": {
 		"no-console": "off",
 		"no-duplicate-case": "warn",
@@ -25,10 +37,9 @@
 		"unicorn/filename-case": "off",
 		"unicorn/prevent-abbreviations": "off",
 		"unicorn/prefer-query-selector": "off",
-		"unicorn/prefer-add-event-listener": "off"
+		"unicorn/prefer-add-event-listener": "off",
+		"optimize-regex/optimize-regex": "warn",
+		"sonarjs/cognitive-complexity": ["error", 25]
 	},
-	"globals": {
-		"React": true,
-		"ReactDOM": false
-	}
+	"globals": {}
 }

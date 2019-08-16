@@ -4,11 +4,8 @@ let TerserPlugin = require("rollup-plugin-terser").terser;
 let EslintPlugin = require("rollup-plugin-eslint").eslint;
 //let GzipPlugin = require("rollup-plugin-gzip");
 //let UglifyES = require("uglify-es");
-let production = process.env.NODE_ENV === 'production';
-let plugins = [
-	EslintPlugin(),
-	BabelPlugin(),
-];
+let production = process.env.NODE_ENV === "production";
+let plugins = [EslintPlugin({ fix: true }), BabelPlugin()];
 let pathName = "";
 if (production) {
 	plugins.push(
@@ -16,10 +13,10 @@ if (production) {
 			ecma: 8,
 			compress: {
 				ecma: 8,
-				passes: 2,
+				passes: 2
 			},
-			mangle:{
-				keep_classnames:true,
+			mangle: {
+				keep_classnames: true
 				//keep_fnames:true
 			},
 			output: {
