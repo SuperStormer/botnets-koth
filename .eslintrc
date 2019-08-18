@@ -28,7 +28,8 @@
 		"sonarjs",
 		"optimize-regex",
 		"array-func",
-		"import"
+		"import",
+		"compat"
 	],
 	"rules": {
 		"no-console": "off",
@@ -39,7 +40,8 @@
 		"unicorn/prefer-query-selector": "off",
 		"unicorn/prefer-add-event-listener": "off",
 		"optimize-regex/optimize-regex": "warn",
-		"sonarjs/cognitive-complexity": ["error", 25]
+		"sonarjs/cognitive-complexity": ["error", 25],
+		"compat/compat": "error"
 	},
 	"globals": {}
 }

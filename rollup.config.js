@@ -2,8 +2,6 @@ let path = require("path");
 let BabelPlugin = require("rollup-plugin-babel");
 let TerserPlugin = require("rollup-plugin-terser").terser;
 let EslintPlugin = require("rollup-plugin-eslint").eslint;
-//let GzipPlugin = require("rollup-plugin-gzip");
-//let UglifyES = require("uglify-es");
 let production = process.env.NODE_ENV === "production";
 let plugins = [EslintPlugin({ fix: true }), BabelPlugin()];
 let pathName = "";
@@ -24,16 +22,27 @@ if (production) {
 			}
 		})
 	);
-	pathName = "build/prod/scripts";
+	pathName = "build/prod";
 } else {
-	pathName = "build/dev/scripts";
+	pathName = "build/dev";
 }
-module.exports = {
-	input: "./src/scripts/index.js",
-	output: {
-		file: path.resolve(__dirname, pathName, "bundle.js"),
-		format: "es",
-		sourcemap: true
+module.exports = [
+	{
+		input: "./src/scripts/index.js",
+		output: {
+			file: path.resolve(__dirname, pathName, "bundle.js"),
+			format: "iife",
+			sourcemap: true
+		},
+		plugins
 	},
-	plugins
-};
+	{
+		input: "./src/scripts/worker.js",
+		output: {
+			file: path.resolve(__dirname, pathName, "worker.js"),
+			format: "esm",
+			sourcemap: true
+		},
+		plugins
+	}
+];

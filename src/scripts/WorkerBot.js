@@ -1,10 +1,18 @@
+import WorkerBotWrapper from "./WorkerBotWrapper.js";
+
 /*eslint no-unused-vars:0*/
-export default class WorkerBot {
-	constructor(x, y) {
-		this.storageSize = 0;
-		this.storage = "";
+class WorkerBot {
+	constructor(index) {
+		this.index = index;
 		this.color = "";
 	}
-	performAction(surrondings, message) {}
-	sendMessage(surrondings) {}
+	performAction(message) {}
+	sendMessage(x, y, surrondings) {}
 }
+/*let oldHasInstance = WorkerBot[Symbol.hasInstance].bind({});
+Object.defineProperty(WorkerBot, Symbol.hasInstance, {
+	value: function(instance) {
+		return instance instanceof WorkerBotWrapper || oldHasInstance;
+	}
+});*/
+export default WorkerBot;

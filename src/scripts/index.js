@@ -1,14 +1,15 @@
 import WorkerBotWrapper from "./WorkerBotWrapper.js";
+import sampleBotnet from "./sampleBotnet.js";
 import { debounce } from "./utils.js";
 let canvas = document.getElementById("grid");
 const CANVAS_SIZE = canvas.width;
 const SQUARE_SIZE = CANVAS_SIZE / 100;
 let context = canvas.getContext("2d");
 let gridlines = true;
-let botClasses = [];
+let botClasses = [sampleBotnet.toString()];
 let displayInterval = 100;
 if (window.Worker) {
-	let worker = new Worker("./Worker.js");
+	let worker = new Worker("./worker.js");
 	worker.postMessage(botClasses);
 	worker.onmessage = debounce(function(grid) {
 		console.log(grid);

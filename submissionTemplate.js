@@ -4,23 +4,26 @@ import WorkerBot from "./src/scripts/WorkerBot.js";
 
 //copy the part below
 function yourBotnet() {
-  class YourControllerBot extends ControllerBot {
-    constructor(locations) {
-      this.name = "";
-      this.storage = "";
-    }
-    sendMessage(messages, index) {
-      return [];
-    }
-  }
-  class YourWorkerBot extends WorkerBot {
-    constructor(x, y) {
-      this.storageSize = 0;
-      this.storage = "";
-      this.color = "";
-    }
-    performAction(surrondings, message) {}
-    sendMessage(surrondings) {}
-  }
-  return { controllerBot: YourControllerBot, workerBot: YourWorkerBot };
+	class YourControllerBot extends ControllerBot {
+		constructor(locations) {
+			super(locations);
+			this.storage = "";
+		}
+		sendMessage(messages, index) {
+			return [];
+		}
+	}
+	class YourWorkerBot extends WorkerBot {
+		constructor(index) {
+			super(index);
+			this.color = "";
+		}
+		performAction(message) {}
+		sendMessage(x, y, surrondings) {}
+	}
+	return {
+		name: "YourBotnet",
+		controllerBot: YourControllerBot,
+		workerBot: YourWorkerBot
+	};
 }
