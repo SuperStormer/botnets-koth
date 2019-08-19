@@ -2,34 +2,13 @@
 	'use strict';
 
 	/*eslint no-unused-vars:0*/
-	class WorkerBotWrapper {
-	  constructor(x, y, index, name, botClass) {
-	    this.x = x;
-	    this.y = y;
-	    this.gold = 0;
-	    this.bot = new botClass(x, y, index);
-	    this.name = "".concat(name, "#").concat(index);
-	    this.stunnedRound = -1;
-	  }
-
-	  performAction(message) {
-	    return this.bot.performAction(message);
-	  }
-
-	  sendMessage(surrondings) {
-	    return this.bot.sendMessage(surrondings);
-	  }
-
-	}
-
-	/*eslint no-unused-vars:0*/
 	class ControllerBot {
 	  constructor(locations) {
 	    this.storage = "";
 	  }
 
 	  sendMessage(messages, index) {
-	    return [];
+	    return "";
 	  }
 
 	}
@@ -39,12 +18,11 @@
 	class WorkerBot {
 	  constructor(index) {
 	    this.index = index;
-	    this.color = "";
 	  }
 
 	  performAction(message) {}
 
-	  sendMessage(x, y, surrondings) {}
+	  sendMessage(x, y, surroundings) {}
 
 	}
 
@@ -53,51 +31,43 @@
 	  class SampleControllerBot extends ControllerBot {
 	    constructor(locations) {
 	      super(locations);
-	      this.name = "";
 	      this.storage = "";
 	    }
 
 	    sendMessage(messages, index) {
 	      console.log(messages);
 	      let surrondings = messages.find(message => message[0] === index)[1];
-	      let otherBot = surrondings.find(square => square === "B");
+	      let otherBot = surrondings.findIndex((square, i) => square === "B" && i !== 12);
 
-	      if (otherBot !== undefined) {
-	        return ["attack", otherBot];
+	      if (otherBot !== -1) {
+	        return ["kill", otherBot];
 	      }
 
-	      let coin = surrondings.find(square => square === "C");
-	      return ["move", coin];
+	      let coin = surrondings.findIndex(square => square === "C");
+
+	      if (coin !== -1) {
+	        return ["move", coin];
+	      }
+
+	      return ["move", 12];
 	    }
 
 	  }
 
 	  class SampleWorkerBot extends WorkerBot {
-	    constructor(index) {
-	      super(index);
-	      this.color = "red";
-	    }
-
 	    performAction(message) {
-	      if (message[0] === "attack") {
-	        return ["attack", message[0]];
-	      }
-
-	      if (message[1] !== undefined) {
-	        return ["move", message];
-	      } else {
-	        return false;
-	      }
+	      return message;
 	    }
 
-	    sendMessage(x, y, surrondings) {
-	      return [this.index, surrondings];
+	    sendMessage(x, y, surroundings) {
+	      return [this.index, surroundings];
 	    }
 
 	  }
 
 	  return {
 	    name: "SampleBotnet",
+	    color: "red",
 	    controllerBot: SampleControllerBot,
 	    workerBot: SampleWorkerBot
 	  };
@@ -140,7 +110,8 @@
 	if (window.Worker) {
 	  let worker = new Worker("./worker.js");
 	  worker.postMessage(botClasses);
-	  worker.onmessage = debounce(function (grid) {
+	  worker.onmessage = debounce(function (event) {
+	    let grid = event.data;
 	    console.log(grid);
 
 	    for (let i = 0; i < 100; i++) {
@@ -148,18 +119,21 @@
 	        let square = grid[i][j];
 	        let dimensions = [i * SQUARE_SIZE, j * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE];
 
-	        if (square !== undefined) {
+	        if (square !== "") {
 	          if (square === "C") {
 	            //coin
-	            context.fillstyle = "rgb(255,255,0)";
-	          } else if (square instanceof WorkerBotWrapper) {
-	            context.fillstyle = square.color;
+	            context.fillStyle = "rgb(255,255,0)";
+	          } else if (square[0] === "B") {
+	            console.log(square[1]);
+	            context.fillStyle = square[1];
+	          } else {
+	            console.log(square);
 	          }
 
 	          context.fillRect(...dimensions);
 	        } else {
 	          context.lineWidth = 0.3;
-	          context.strokestyle = "rgb(20,20,20)";
+	          context.strokeStyle = "rgb(20,20,20)";
 	          context.strokeRect(...dimensions);
 	        }
 	      }

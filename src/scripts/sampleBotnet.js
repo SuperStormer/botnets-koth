@@ -6,41 +6,35 @@ export default function sampleBotnet() {
 	class SampleControllerBot extends ControllerBot {
 		constructor(locations) {
 			super(locations);
-			this.name = "";
 			this.storage = "";
 		}
 		sendMessage(messages, index) {
 			console.log(messages);
 			let surrondings = messages.find(message => message[0] === index)[1];
-			let otherBot = surrondings.find(square => square === "B");
-			if (otherBot !== undefined) {
-				return ["attack", otherBot];
+			let otherBot = surrondings.findIndex(
+				(square, i) => square === "B" && i !== 12
+			);
+			if (otherBot !== -1) {
+				return ["kill", otherBot];
 			}
-			let coin = surrondings.find(square => square === "C");
-			return ["move", coin];
+			let coin = surrondings.findIndex(square => square === "C");
+			if (coin !== -1) {
+				return ["move", coin];
+			}
+			return ["move", 12];
 		}
 	}
 	class SampleWorkerBot extends WorkerBot {
-		constructor(index) {
-			super(index);
-			this.color = "red";
-		}
 		performAction(message) {
-			if (message[0] === "attack") {
-				return ["attack", message[0]];
-			}
-			if (message[1] !== undefined) {
-				return ["move", message];
-			} else {
-				return false;
-			}
+			return message;
 		}
-		sendMessage(x, y, surrondings) {
-			return [this.index, surrondings];
+		sendMessage(x, y, surroundings) {
+			return [this.index, surroundings];
 		}
 	}
 	return {
 		name: "SampleBotnet",
+		color: "red",
 		controllerBot: SampleControllerBot,
 		workerBot: SampleWorkerBot
 	};

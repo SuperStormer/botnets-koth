@@ -1,4 +1,3 @@
-import WorkerBotWrapper from "./WorkerBotWrapper.js";
 import sampleBotnet from "./sampleBotnet.js";
 import { debounce } from "./utils.js";
 let canvas = document.getElementById("grid");
@@ -11,7 +10,8 @@ let displayInterval = 100;
 if (window.Worker) {
 	let worker = new Worker("./worker.js");
 	worker.postMessage(botClasses);
-	worker.onmessage = debounce(function(grid) {
+	worker.onmessage = debounce(function(event) {
+		let grid = event.data;
 		console.log(grid);
 		for (let i = 0; i < 100; i++) {
 			for (let j = 0; j < 100; j++) {
@@ -22,17 +22,20 @@ if (window.Worker) {
 					SQUARE_SIZE,
 					SQUARE_SIZE
 				];
-				if (square !== undefined) {
+				if (square !== "") {
 					if (square === "C") {
 						//coin
-						context.fillstyle = "rgb(255,255,0)";
-					} else if (square instanceof WorkerBotWrapper) {
-						context.fillstyle = square.color;
+						context.fillStyle = "rgb(255,255,0)";
+					} else if (square[0] === "B") {
+						console.log(square[1]);
+						context.fillStyle = square[1];
+					} else {
+						console.log(square);
 					}
 					context.fillRect(...dimensions);
 				} else if (gridlines) {
 					context.lineWidth = 0.3;
-					context.strokestyle = "rgb(20,20,20)";
+					context.strokeStyle = "rgb(20,20,20)";
 					context.strokeRect(...dimensions);
 				}
 			}

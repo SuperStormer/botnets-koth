@@ -19,7 +19,7 @@ function yourBotnet() {
 			this.color = "";
 		}
 		performAction(message) {}
-		sendMessage(x, y, surrondings) {}
+		sendMessage(x, y, surroundings) {}
 	}
 	return {
 		name: "YourBotnet",
