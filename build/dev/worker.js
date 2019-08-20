@@ -13,30 +13,6 @@ function shuffle(array) {
 } //adapted from https://davidwalsh.name/essential-javascript-functions
 
 /*eslint no-unused-vars:0*/
-class WorkerBotWrapper {
-  constructor(x, y, index, name, color, botClass) {
-    this.x = x;
-    this.y = y;
-    this.index = index;
-    this.gold = 0;
-    this.color = color;
-    this.bot = new botClass(index);
-    this.name = "".concat(name, "#").concat(index);
-    this.stunnedRound = undefined;
-  }
-
-  performAction(message) {
-    return this.bot.performAction(message);
-  }
-
-  sendMessage(x, y, surrondings) {
-    return this.bot.sendMessage(x, y, surrondings);
-  }
-
-}
-
-/*eslint no-unused-vars:0*/
-
 class WorkerBot {
   constructor(index) {
     this.index = index;
@@ -60,11 +36,36 @@ class ControllerBot {
 
 }
 
+/*eslint no-unused-vars:0*/
+class WorkerBotWrapper {
+  constructor(x, y, index, name, color, botClass) {
+    this.x = x;
+    this.y = y;
+    this.index = index;
+    this.gold = 0;
+    this.color = color;
+    this.bot = new botClass(index);
+    this.name = "".concat(name, "#").concat(index);
+    this.stunnedRound = undefined;
+  }
+
+  performAction(message) {
+    return this.bot.performAction(message);
+  }
+
+  sendMessage(x, y, surrondings) {
+    return this.bot.sendMessage(x, y, surrondings);
+  }
+
+}
+
 const STARTING_COINS = 100;
 const COINS_PER_ROUND = 10;
 const NUM_WORKER_BOTS = 20;
 class Controller {
   constructor(botClasses, displayFunc) {
+    let rounds = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1000;
+    this.rounds = rounds;
     this.displayFunc = displayFunc;
     this.botClasses = botClasses.filter(botClasses2 => botClasses2.controllerBot.prototype instanceof ControllerBot && botClasses2.workerBot.prototype instanceof WorkerBot);
   }
@@ -74,7 +75,7 @@ class Controller {
     shuffle(this.botnets);
     this.botnets = this.botnets.slice(0, 15);
 
-    for (let i = 0; i < 1; i++) {
+    for (let i = 0; i < this.rounds; i++) {
       this.runRound(i);
     }
 
@@ -247,8 +248,8 @@ class Controller {
 let eval2 = eval;
 
 onmessage = function onmessage(event) {
-  let botClasses = event.data.map(func => eval2("(".concat(func, ")()")));
-  let controller = new Controller(botClasses, postMessage.bind(this));
+  let botClasses = event.data.botClasses.map(func => eval2("(".concat(func, ")()")));
+  let controller = new Controller(botClasses, postMessage.bind(this), event.data.rounds);
   controller.runGame();
 };
 //# sourceMappingURL=worker.js.map

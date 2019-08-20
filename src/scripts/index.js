@@ -7,9 +7,10 @@ let context = canvas.getContext("2d");
 let gridlines = true;
 let botClasses = [sampleBotnet.toString()];
 let displayInterval = 100;
+let rounds = 1000;
 if (window.Worker) {
 	let worker = new Worker("./worker.js");
-	worker.postMessage(botClasses);
+	worker.postMessage({ botClasses, rounds });
 	worker.onmessage = debounce(function(event) {
 		let grid = event.data;
 		console.log(grid);

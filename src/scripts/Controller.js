@@ -6,7 +6,8 @@ const STARTING_COINS = 100;
 const COINS_PER_ROUND = 10;
 const NUM_WORKER_BOTS = 20;
 export default class Controller {
-	constructor(botClasses, displayFunc) {
+	constructor(botClasses, displayFunc, rounds = 1000) {
+		this.rounds = rounds;
 		this.displayFunc = displayFunc;
 		this.botClasses = botClasses.filter(
 			botClasses2 =>
@@ -18,7 +19,7 @@ export default class Controller {
 		this.initGrid();
 		shuffle(this.botnets);
 		this.botnets = this.botnets.slice(0, 15);
-		for (let i = 0; i < 1; i++) {
+		for (let i = 0; i < this.rounds; i++) {
 			this.runRound(i);
 		}
 		return this.botnets
