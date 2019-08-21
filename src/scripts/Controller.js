@@ -1,4 +1,4 @@
-import { randInt, shuffle } from "./utils.js";
+import { randInt, shuffle, sleep } from "./utils.js";
 import WorkerBot from "./WorkerBot.js";
 import ControllerBot from "./ControllerBot.js";
 import WorkerBotWrapper from "./WorkerBotWrapper.js";
@@ -6,21 +6,22 @@ const STARTING_COINS = 100;
 const COINS_PER_ROUND = 10;
 const NUM_WORKER_BOTS = 20;
 export default class Controller {
-	constructor(botClasses, displayFunc, rounds = 1000) {
+	constructor(botClasses, displayFunc, rounds = 1000, displayInterval = 100) {
 		this.rounds = rounds;
 		this.displayFunc = displayFunc;
+		this.displayInterval = displayInterval;
 		this.botClasses = botClasses.filter(
 			botClasses2 =>
 				botClasses2.controllerBot.prototype instanceof ControllerBot &&
 				botClasses2.workerBot.prototype instanceof WorkerBot
 		);
 	}
-	runGame() {
+	async runGame() {
 		this.initGrid();
 		shuffle(this.botnets);
 		this.botnets = this.botnets.slice(0, 15);
 		for (let i = 0; i < this.rounds; i++) {
-			this.runRound(i);
+			await this.runRound(i);
 		}
 		return this.botnets
 			.sort((a, b) => a.gold - b.gold)
@@ -33,7 +34,7 @@ export default class Controller {
 			)
 			.join("\n");
 	}
-	runRound(round) {
+	async runRound(round) {
 		console.log(`Round #${round}`);
 		for (let i = 0; i < COINS_PER_ROUND; i++) {
 			try {
@@ -88,6 +89,7 @@ export default class Controller {
 			}
 		}
 		this.display();
+		await sleep(this.displayInterval);
 	}
 	initGrid() {
 		this.grid = new Array(100); //indexed [y,x]

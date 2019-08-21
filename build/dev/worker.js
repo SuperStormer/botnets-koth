@@ -12,6 +12,13 @@ function shuffle(array) {
   }
 }
 
+function sleep(timeout) {
+  // eslint-disable-next-line no-unused-vars
+  return new Promise((resolve, reject) => {
+    setTimeout(resolve, timeout);
+  });
+}
+
 /*eslint no-unused-vars:0*/
 class WorkerBot {
   constructor(index) {
@@ -66,24 +73,26 @@ const NUM_WORKER_BOTS = 20;
 class Controller {
   constructor(botClasses, displayFunc) {
     let rounds = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1000;
+    let displayInterval = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 100;
     this.rounds = rounds;
     this.displayFunc = displayFunc;
+    this.displayInterval = displayInterval;
     this.botClasses = botClasses.filter(botClasses2 => botClasses2.controllerBot.prototype instanceof ControllerBot && botClasses2.workerBot.prototype instanceof WorkerBot);
   }
 
-  runGame() {
+  async runGame() {
     this.initGrid();
     shuffle(this.botnets);
     this.botnets = this.botnets.slice(0, 15);
 
     for (let i = 0; i < this.rounds; i++) {
-      this.runRound(i);
+      await this.runRound(i);
     }
 
     return this.botnets.sort((a, b) => a.gold - b.gold).map((botnet, i) => "".concat(i + 1, ". ").concat(botnet.name, ":").concat(botnet.workerBots.reduce((a, b) => a + b.gold, 0), " Gold")).join("\n");
   }
 
-  runRound(round) {
+  async runRound(round) {
     console.log("Round #".concat(round));
 
     for (let i = 0; i < COINS_PER_ROUND; i++) {
@@ -126,6 +135,7 @@ class Controller {
     }
 
     this.display();
+    await sleep(this.displayInterval);
   }
 
   initGrid() {
@@ -310,7 +320,9 @@ onmessage = function onmessage(event) {
   let botClasses = event.data.botClasses.map(func => eval2("(".concat(func, ")()")));
   let controller = new Controller(botClasses, grid => {
     postMessage(["update", grid]);
-  }, event.data.rounds);
-  postMessage(["end", controller.runGame()]);
+  }, event.data.rounds, event.data.displayInterval);
+  controller.runGame(results => {
+    postMessage(["end", results]);
+  });
 };
 //# sourceMappingURL=worker.js.map

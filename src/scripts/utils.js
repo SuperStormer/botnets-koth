@@ -11,5 +11,10 @@ function shuffle(array) {
 		array[j] = temp;
 	}
 }
-
-export { randInt, shuffle };
+function sleep(timeout) {
+	// eslint-disable-next-line no-unused-vars
+	return new Promise((resolve, reject) => {
+		setTimeout(resolve, timeout);
+	});
+}
+export { randInt, shuffle, sleep };

@@ -7,7 +7,10 @@ onmessage = function(event) {
 		grid => {
 			postMessage(["update", grid]);
 		},
-		event.data.rounds
+		event.data.rounds,
+		event.data.displayInterval
 	);
-	postMessage(["end", controller.runGame()]);
+	controller.runGame(results => {
+		postMessage(["end", results]);
+	});
 };
