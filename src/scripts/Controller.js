@@ -27,7 +27,7 @@ export default class Controller {
 			.map(
 				(botnet, i) =>
 					`${i + 1}. ${botnet.name}:${botnet.workerBots.reduce(
-						(a, b) => a.gold + b.gold,
+						(a, b) => a + b.gold,
 						0
 					)} Gold`
 			)
@@ -202,7 +202,6 @@ export default class Controller {
 	kill(x, y) {
 		let bot = this.botnets
 			.flatMap(botnet => botnet.workerBots)
-
 			.find(bot => bot.x === x && bot.y === y);
 		bot.alive = false;
 	}

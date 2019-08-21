@@ -80,7 +80,7 @@ class Controller {
       this.runRound(i);
     }
 
-    return this.botnets.sort((a, b) => a.gold - b.gold).map((botnet, i) => "".concat(i + 1, ". ").concat(botnet.name, ":").concat(botnet.workerBots.reduce((a, b) => a.gold + b.gold, 0), " Gold")).join("\n");
+    return this.botnets.sort((a, b) => a.gold - b.gold).map((botnet, i) => "".concat(i + 1, ". ").concat(botnet.name, ":").concat(botnet.workerBots.reduce((a, b) => a + b.gold, 0), " Gold")).join("\n");
   }
 
   runRound(round) {
@@ -308,7 +308,9 @@ let eval2 = eval;
 
 onmessage = function onmessage(event) {
   let botClasses = event.data.botClasses.map(func => eval2("(".concat(func, ")()")));
-  let controller = new Controller(botClasses, postMessage.bind(this), event.data.rounds);
-  controller.runGame();
+  let controller = new Controller(botClasses, grid => {
+    postMessage(["update", grid]);
+  }, event.data.rounds);
+  postMessage(["end", controller.runGame()]);
 };
 //# sourceMappingURL=worker.js.map

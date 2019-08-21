@@ -11,24 +11,5 @@ function shuffle(array) {
 		array[j] = temp;
 	}
 }
-//adapted from https://davidwalsh.name/essential-javascript-functions
-function debounce(func, wait, immediate) {
-	let timeout;
-	return function() {
-		let context = this,
-			args = arguments;
-		let later = function() {
-			timeout = null;
-			if (!immediate) {
-				func.apply(context, args);
-			}
-		};
-		let callNow = immediate && !timeout;
-		clearTimeout(timeout);
-		timeout = setTimeout(later, wait);
-		if (callNow) {
-			func.apply(context, args);
-		}
-	};
-}
-export { randInt, shuffle, debounce };
+
+export { randInt, shuffle };

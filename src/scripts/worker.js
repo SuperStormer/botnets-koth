@@ -4,8 +4,10 @@ onmessage = function(event) {
 	let botClasses = event.data.botClasses.map(func => eval2(`(${func})()`));
 	let controller = new Controller(
 		botClasses,
-		postMessage.bind(this),
+		grid => {
+			postMessage(["update", grid]);
+		},
 		event.data.rounds
 	);
-	controller.runGame();
+	postMessage(["end", controller.runGame()]);
 };

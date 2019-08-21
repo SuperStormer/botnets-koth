@@ -72,40 +72,48 @@
 	  };
 	}
 
-	//from https://stackoverflow.com/a/1527820/
-
-
-	function debounce(func, wait, immediate) {
-	  let timeout;
-	  return function () {
-	    let context = this,
-	        args = arguments;
-
-	    let later = function later() {
-	      timeout = null;
-
-	      if (!immediate) {
-	        func.apply(context, args);
-	      }
-	    };
-
-	    let callNow = immediate && !timeout;
-	    clearTimeout(timeout);
-	    timeout = setTimeout(later, wait);
-
-	    if (callNow) {
-	      func.apply(context, args);
-	    }
-	  };
-	}
-
 	let canvas = document.getElementById("grid");
 	const CANVAS_SIZE = canvas.width;
 	const SQUARE_SIZE = CANVAS_SIZE / 100;
 	let context = canvas.getContext("2d");
 	let botClasses = [sampleBotnet.toString()];
 	let displayInterval = 100;
-	let rounds = 10;
+	let rounds = 1000;
+	let displayQueue = [];
+	let finishedGame = false;
+	let results;
+
+	function displayGrid(grid) {
+	  context.clearRect(0, 0, canvas.width, canvas.height);
+
+	  for (let i = 0; i < 100; i++) {
+	    for (let j = 0; j < 100; j++) {
+	      let square = grid[i][j];
+	      let dimensions = [i * SQUARE_SIZE, j * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE];
+
+	      if (square !== "") {
+	        if (square === "C") {
+	          //coin
+	          context.fillStyle = "rgb(255,255,0)";
+	        } else if (square[0] === "B") {
+	          context.fillStyle = square[1];
+	        } else {
+	          console.error("Invalid Square:".concat(square));
+	        }
+
+	        context.fillRect(...dimensions);
+	      } else {
+	        context.lineWidth = 0.3;
+	        context.strokeStyle = "rgb(20,20,20)";
+	        context.strokeRect(...dimensions);
+	      }
+	    }
+	  }
+	}
+
+	function displayResults() {
+	  console.log(results);
+	}
 
 	if (window.Worker) {
 	  let worker = new Worker("./worker.js");
@@ -113,32 +121,23 @@
 	    botClasses,
 	    rounds
 	  });
-	  worker.onmessage = debounce(function (event) {
-	    let grid = event.data;
-	    context.clearRect(0, 0, canvas.width, canvas.height);
 
-	    for (let i = 0; i < 100; i++) {
-	      for (let j = 0; j < 100; j++) {
-	        let square = grid[i][j];
-	        let dimensions = [i * SQUARE_SIZE, j * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE];
+	  worker.onmessage = function (event) {
+	    if (event.data[0] === "update") {
+	      let grid = event.data[1];
+	      displayQueue.push(grid);
+	    } else if (event.data[0] === "end") {
+	      finishedGame = true;
+	      results = event.data[1];
+	    }
+	  };
 
-	        if (square !== "") {
-	          if (square === "C") {
-	            //coin
-	            context.fillStyle = "rgb(255,255,0)";
-	          } else if (square[0] === "B") {
-	            context.fillStyle = square[1];
-	          } else {
-	            console.error("Invalid Square:".concat(square));
-	          }
-
-	          context.fillRect(...dimensions);
-	        } else {
-	          context.lineWidth = 0.3;
-	          context.strokeStyle = "rgb(20,20,20)";
-	          context.strokeRect(...dimensions);
-	        }
-	      }
+	  let interval = setInterval(() => {
+	    if (displayQueue.length == 0 && finishedGame) {
+	      clearInterval(interval);
+	      displayResults();
+	    } else if (displayQueue.length > 0) {
+	      displayGrid(displayQueue.shift());
 	    }
 	  }, displayInterval);
 	} else {
