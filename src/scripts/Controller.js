@@ -25,14 +25,10 @@ export default class Controller {
 		}
 		return this.botnets
 			.sort((a, b) => a.gold - b.gold)
-			.map(
-				(botnet, i) =>
-					`${i + 1}. ${botnet.name}:${botnet.workerBots.reduce(
-						(a, b) => a + b.gold,
-						0
-					)} Gold`
-			)
-			.join("\n");
+			.map(botnet => [
+				botnet.name,
+				botnet.workerBots.reduce((a, b) => a + b.gold, 0)
+			]);
 	}
 	async runRound(round) {
 		console.log(`Round #${round}`);

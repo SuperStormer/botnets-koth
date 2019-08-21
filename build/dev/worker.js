@@ -89,7 +89,7 @@ class Controller {
       await this.runRound(i);
     }
 
-    return this.botnets.sort((a, b) => a.gold - b.gold).map((botnet, i) => "".concat(i + 1, ". ").concat(botnet.name, ":").concat(botnet.workerBots.reduce((a, b) => a + b.gold, 0), " Gold")).join("\n");
+    return this.botnets.sort((a, b) => a.gold - b.gold).map(botnet => [botnet.name, botnet.workerBots.reduce((a, b) => a + b.gold, 0)]);
   }
 
   async runRound(round) {
@@ -321,7 +321,7 @@ onmessage = function onmessage(event) {
   let controller = new Controller(botClasses, grid => {
     postMessage(["update", grid]);
   }, event.data.rounds, event.data.displayInterval);
-  controller.runGame(results => {
+  controller.runGame().then(results => {
     postMessage(["end", results]);
   });
 };

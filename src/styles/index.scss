@@ -10,10 +10,23 @@ $font-size: 1em;
 	vertical-align: middle;
 }
 //element styling
+#root {
+	display: flex;
+}
 #grid {
-	@extend %centered;
-	@extend %fill-parent;
 	border-style: solid;
 	border-width: $border-width;
 	border-color: black;
+	float: left;
+	margin-right: 15px;
+}
+#test-botnet {
+	width: 90%;
+	height: 40%;
+}
+#sidebar {
+	flex-grow: 1;
+}
+#controls {
+	margin-bottom: 10px;
 }

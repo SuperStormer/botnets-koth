@@ -44,6 +44,24 @@
 				>Your browser does not support the Canvas API. Please switch
 				browsers</canvas
 			>
+			<div id="sidebar">
+				<div id="controls">
+					<button id="run-game">Run Game</button>
+					<button id="stop-game">Stop Game</button>
+					<input
+						type="number"
+						id="display-interval"
+						placeholder="display delay"
+						value="100"
+					/>
+				</div>
+				<div id="round-counter-wrapper">
+					Round #<span id="round-counter"></span>
+				</div>
+				<textarea id="test-botnet" placeholder="Insert a botnet for testing here"></textarea>
+				<h3>Rankings</h3>
+				<ol id="rankings"></ul>
+			</div>
 		</div>
 		<script src="/bundle.js"></script>
 	</body>

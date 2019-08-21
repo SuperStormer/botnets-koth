@@ -10,7 +10,7 @@ onmessage = function(event) {
 		event.data.rounds,
 		event.data.displayInterval
 	);
-	controller.runGame(results => {
+	controller.runGame().then(results => {
 		postMessage(["end", results]);
 	});
 };

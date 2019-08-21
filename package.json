@@ -28,7 +28,7 @@
 		"build:all": "npm-run-all --parallel build:dev build:prod build:icons:all",
 		"build:new": "npm-run-all --serial clean build:all",
 		"watch:js": "npm run chokidar \"src/scripts/**/*.js\" \"npm run build:js\"",
-		"watch:sass": "npm run chokidar \"src/styles/*.scss\" \"npm run build:sass\"",
+		"watch:sass": "npm run chokidar \"src/styles/*.scss\" \"npm run build:sass -- --output build/dev/\"",
 		"watch:html": "npm run chokidar \"src/index.html\" \"npm run copy:html\"",
 		"watch:icons": "npm run chokidar \"src/icon.png\" \"npm run build:icons\"",
 		"watch:manifest": "npm run chokidar \"src/manifest.json\" \"npm run copy:manifest \\\"build\\dev\\manifest.json\\\"\"",

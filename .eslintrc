@@ -41,7 +41,9 @@
 		"unicorn/prefer-add-event-listener": "off",
 		"optimize-regex/optimize-regex": "warn",
 		"sonarjs/cognitive-complexity": ["error", 25],
-		"compat/compat": "error"
+		"compat/compat": "error",
+		"promise/always-return": "off",
+		"promise/catch-or-return": "off"
 	},
 	"globals": {}
 }

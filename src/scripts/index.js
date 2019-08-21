@@ -5,10 +5,12 @@ const SQUARE_SIZE = CANVAS_SIZE / 100;
 let context = canvas.getContext("2d");
 let gridlines = true;
 let botClasses = [sampleBotnet.toString()];
-let displayInterval = 100;
 let rounds = 1000;
+let counter = document.getElementById("round-counter");
+let worker = undefined;
 function displayGrid(grid) {
 	context.clearRect(0, 0, canvas.width, canvas.height);
+	counter.textContent = parseInt(counter.textContent, 10) + 1;
 	for (let i = 0; i < 100; i++) {
 		for (let j = 0; j < 100; j++) {
 			let square = grid[i][j];
@@ -37,21 +39,56 @@ function displayGrid(grid) {
 	}
 }
 function displayResults(results) {
+	let rankings = document.getElementById("rankings");
+	rankings.innerHTML = "";
+	for (let row of results) {
+		let ranking = document.createElement("li");
+		ranking.append(`${row[0]}: ${row[1]} Gold`);
+		rankings.append(ranking);
+	}
 	console.log(results);
 }
+function endWorker() {
+	worker.terminate();
+	delete window.worker;
+}
 if (window.Worker) {
-	let worker = new Worker("./worker.js");
-	worker.postMessage({ botClasses, rounds, displayInterval });
-	worker.onmessage = function(event) {
-		if (event.data[0] === "update") {
-			let grid = event.data[1];
-			displayGrid(grid);
-		} else if (event.data[0] === "end") {
-			displayResults(event.data[1]);
-			worker.terminate();
-			delete window.worker;
-		}
-	};
+	document
+		.getElementById("run-game")
+		.addEventListener("click", function(event) {
+			event.preventDefault();
+			counter.textContent = "0";
+			let displayInterval = parseInt(
+				document.getElementById("display-interval").value,
+				10
+			);
+			let testBotnet = document.getElementById("test-botnet").value;
+			let allBotClasses;
+			if (testBotnet.length > 0) {
+				allBotClasses = botClasses.concat(testBotnet);
+			} else {
+				allBotClasses = botClasses;
+			}
+			if (worker) {
+				endWorker();
+			}
+			worker = new Worker("./worker.js");
+			worker.postMessage({
+				botClasses: allBotClasses,
+				rounds,
+				displayInterval
+			});
+			worker.onmessage = function(event) {
+				if (event.data[0] === "update") {
+					let grid = event.data[1];
+					displayGrid(grid);
+				} else if (event.data[0] === "end") {
+					displayResults(event.data[1]);
+					endWorker();
+				}
+			};
+		});
+	document.getElementById("stop-game").addEventListener("click", endWorker);
 } else {
 	console.error("Worker API Unsupported. Please use another browser");
 }
