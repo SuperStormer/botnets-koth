@@ -58,6 +58,8 @@ if (window.Worker) {
 		if (displayQueue.length == 0 && finishedGame) {
 			clearInterval(interval);
 			displayResults();
+			worker.terminate();
+			delete window.worker;
 		} else if (displayQueue.length > 0) {
 			displayGrid(displayQueue.shift());
 		}

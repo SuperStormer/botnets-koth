@@ -10,7 +10,7 @@ function shuffle(array) {
     array[i] = array[j];
     array[j] = temp;
   }
-} //adapted from https://davidwalsh.name/essential-javascript-functions
+}
 
 /*eslint no-unused-vars:0*/
 class WorkerBot {
