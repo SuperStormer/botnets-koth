@@ -9,6 +9,7 @@ export default class WorkerBotWrapper {
 		this.bot = new botClass(index);
 		this.name = `${name}#${index}`;
 		this.stunnedRound = undefined;
+		this.alive = true;
 	}
 	performAction(message) {
 		return this.bot.performAction(message);

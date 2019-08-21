@@ -34,7 +34,7 @@ export default class Controller {
 			.join("\n");
 	}
 	runRound(round) {
-		console.log(round);
+		console.log(`Round #${round}`);
 		for (let i = 0; i < COINS_PER_ROUND; i++) {
 			try {
 				this.generateCoin();
@@ -47,31 +47,43 @@ export default class Controller {
 		for (let botnet of this.botnets) {
 			for (let i = 0; i < botnet.workerBots.length; i++) {
 				let workerBot = botnet.workerBots[i];
-				if (
-					workerBot.stunnedRound === undefined ||
-					workerBot.stunnedRound === round - 1
-				) {
-					workerBot.stunnedRound = undefined;
-					let allMessages = workerBots.map(workerBot2 =>
-						workerBot2.sendMessage(
-							workerBot2.x,
-							workerBot2.y,
-							this.getSurroundings(workerBot2.x, workerBot2.y)
-						)
-					);
-					let controllerBotMessage = botnet.controllerBot.sendMessage(
-						allMessages,
-						i
-					);
-					let action = workerBot.performAction(controllerBotMessage);
-					if (!this.handleAction(action, workerBot)) {
-						console.log(
-							`${workerBot.name} made an invalid action(${action})`
+				if (workerBot.alive) {
+					if (
+						workerBot.stunnedRound === undefined ||
+						workerBot.stunnedRound === round - 1
+					) {
+						workerBot.stunnedRound = undefined;
+						let allMessages = workerBots.map(workerBot2 =>
+							workerBot2.sendMessage(
+								workerBot2.x,
+								workerBot2.y,
+								this.getSurroundings(workerBot2.x, workerBot2.y)
+							)
 						);
+						let controllerBotMessage = botnet.controllerBot.sendMessage(
+							allMessages,
+							i
+						);
+						try {
+							let action = workerBot.performAction(
+								controllerBotMessage
+							);
+
+							if (!this.handleAction(action, workerBot)) {
+								console.log(
+									`${workerBot.name} made an invalid action(${action})`
+								);
+							}
+						} catch (error) {
+							console.error(
+								`${workerBot.name} threw this exception with this message: ${controllerBotMessage}`
+							);
+							console.error(error.stack);
+						}
+					} else {
+						//emp'd
+						console.log(`${workerBot.name} was EMP'd`);
 					}
-				} else {
-					//emp'd
-					console.log(`${workerBot.name} was EMP'd`);
 				}
 			}
 		}
@@ -111,53 +123,88 @@ export default class Controller {
 		//returns true if action was valid
 		switch (action[0]) {
 			case "kill":
-				if ([6, 7, 8, 11, 12, 13, 16, 17, 18].includes(action[1])) {
-					let coords = this.surroundingsIndexToCoords(
-						action[1],
-						bot.x,
-						bot.y
-					);
-					let square = this.grid[coords[1]][coords[0]];
-					if (square instanceof WorkerBotWrapper) {
-						let gold = Math.floor(square.gold);
-						console.log(
-							`${bot.name} killed ${square.name} for ${gold} gold`
-						);
-						bot.gold += gold;
-						square = "";
-						return true;
-					} else {
-						return false;
-					}
-				} else {
-					return false;
-				}
+				return this.handleKill(action[1], bot);
 			case "move":
-				if ([6, 7, 8, 11, 13, 16, 17, 18].includes(action[1])) {
-					let coords = this.surroundingsIndexToCoords(
-						action[1],
-						bot.x,
-						bot.y
-					);
-					let square = this.grid[coords[1]][coords[0]];
-					if (square === "" || square === "C") {
-						this.grid[bot.y][bot.x] = "";
-						square = bot;
-						[bot.x, bot.y] = coords;
-						return true;
-					} else {
-						return false;
-					}
-				} else if (action[1] === 12) {
-					return true;
-				} else {
-					return false;
-				}
+				return this.handleMove(action[1], bot);
 			case "emp":
 				throw new TypeError("emp not implemented");
 			default:
 				console.log(`${bot.name} skipped its turn`);
 		}
+	}
+	handleKill(param, bot) {
+		if ([6, 7, 8, 11, 13, 16, 17, 18].includes(param)) {
+			let coords = this.surroundingsIndexToCoords(param, bot.x, bot.y);
+			let square;
+			try {
+				square = this.grid[coords[1]][coords[0]];
+			} catch (error) {
+				console.error(
+					`${bot.name} tried to kill an invalid location(${coords})`
+				);
+			}
+			if (square instanceof WorkerBotWrapper) {
+				let gold = Math.floor(square.gold);
+				console.log(
+					`${bot.name} killed ${square.name} for ${gold} gold`
+				);
+				bot.gold += gold;
+				this.grid[coords[1]][coords[0]] = "";
+				try {
+					this.kill(coords[0], coords[1]);
+				} catch (error) {
+					console.error(coords);
+					console.error(bot);
+					console.error(square);
+					console.error(this.botnets);
+				}
+				return true;
+			} else {
+				return false;
+			}
+		} else if (param === 12) {
+			console.log(`${bot.name} commited suicide`);
+			this.kill(bot.x, bot.y);
+			return true;
+		} else {
+			return false;
+		}
+	}
+	handleMove(param, bot) {
+		if ([6, 7, 8, 11, 13, 16, 17, 18].includes(param)) {
+			let coords = this.surroundingsIndexToCoords(param, bot.x, bot.y);
+			let square;
+			try {
+				square = this.grid[coords[1]][coords[0]];
+			} catch (error) {
+				console.error(
+					`${bot.name} tried to move to an invalid location(${coords})`
+				);
+			}
+			if (square === "" || square === "C") {
+				if (square === "C") {
+					bot.gold++;
+				}
+				this.grid[bot.y][bot.x] = "";
+				this.grid[coords[1]][coords[0]] = bot;
+				[bot.x, bot.y] = coords;
+
+				return true;
+			} else {
+				return false;
+			}
+		} else if (param === 12) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	kill(x, y) {
+		let bot = this.botnets
+			.flatMap(botnet => botnet.workerBots)
+
+			.find(bot => bot.x === x && bot.y === y);
+		bot.alive = false;
 	}
 	generateCoin() {
 		let x = randInt(0, 99);
@@ -203,6 +250,12 @@ export default class Controller {
 	}
 	surroundingsIndexToCoords(index, x, y) {
 		//returns as x,y
+		/*console.log(
+			`indx:${index},x=${x},y=${y}, return=${[
+				(index % 5) - 2 + x,
+				Math.floor(index / 5) - 2 + y
+			]}`
+		);*/
 		return [(index % 5) - 2 + x, Math.floor(index / 5) - 2 + y];
 	}
 	display() {
