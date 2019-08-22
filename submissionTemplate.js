@@ -14,15 +14,12 @@ function yourBotnet() {
 		}
 	}
 	class YourWorkerBot extends WorkerBot {
-		constructor(index) {
-			super(index);
-			this.color = "";
-		}
 		performAction(message) {}
 		sendMessage(x, y, surroundings) {}
 	}
 	return {
 		name: "YourBotnet",
+		color: "",
 		controllerBot: YourControllerBot,
 		workerBot: YourWorkerBot
 	};
