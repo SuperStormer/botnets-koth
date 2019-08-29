@@ -14,7 +14,7 @@ if (production) {
 				passes: 2
 			},
 			mangle: {
-				keep_classnames: true
+				//keep_classnames: true
 				//keep_fnames:true
 			},
 			output: {

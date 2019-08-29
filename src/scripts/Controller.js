@@ -1,6 +1,4 @@
 import { randInt, shuffle, sleep } from "./utils.js";
-import WorkerBot from "./WorkerBot.js";
-import ControllerBot from "./ControllerBot.js";
 import WorkerBotWrapper from "./WorkerBotWrapper.js";
 const STARTING_COINS = 100;
 const COINS_PER_ROUND = 10;
@@ -10,11 +8,7 @@ export default class Controller {
 		this.rounds = rounds;
 		this.displayFunc = displayFunc;
 		this.displayInterval = displayInterval;
-		this.botClasses = botClasses.filter(
-			botClasses2 =>
-				botClasses2.controllerBot.prototype instanceof ControllerBot &&
-				botClasses2.workerBot.prototype instanceof WorkerBot
-		);
+		this.botClasses = botClasses;
 	}
 	async runGame() {
 		this.initGrid();
@@ -247,12 +241,6 @@ export default class Controller {
 	}
 	surroundingsIndexToCoords(index, x, y) {
 		//returns as x,y
-		/*console.log(
-			`indx:${index},x=${x},y=${y}, return=${[
-				(index % 5) - 2 + x,
-				Math.floor(index / 5) - 2 + y
-			]}`
-		);*/
 		return [(index % 5) - 2 + x, Math.floor(index / 5) - 2 + y];
 	}
 	display() {
